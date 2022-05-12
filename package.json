@@ -1,0 +1,19 @@
+{
+  "name": "api-concesionario",
+  "version": "1.0.0",
+  "description": "api que permite enviar solicitudes CRUD",
+  "main": "index.js",
+  "repository": "https://github.com/nibague/api-concesionario",
+  "author": "nibague <nikolasibagues@gmail.com>",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
+  }
+}
