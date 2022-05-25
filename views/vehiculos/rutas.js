@@ -1,6 +1,6 @@
 import Express from 'express';
 import { getDB } from '../../db/db.js';
-import { queryAllVehiculos, crearVehiculo, editarVehiculo, eliminarVehiculo } from '../../controllers/vehiculos/controller.js';
+import { queryAllVehiculos, crearVehiculo, editarVehiculo, eliminarVehiculo, consultarVehiculo } from '../../controllers/vehiculos/controller.js';
 
 const rutasVehiculo= Express.Router();
 
@@ -16,13 +16,10 @@ const genericCallback = (res) => {
     };
 };
 
-
-
 rutasVehiculo.route('/vehiculos').get((req, res)=>{
     console.log('sending request get in the route /vehiculos');
     queryAllVehiculos(genericCallback(res));
 });
-
 
 // solicitudes de tipo post no se pueden probar en el navegador
 // estas solicitudes son las que se envian desde el front-end
@@ -31,6 +28,11 @@ rutasVehiculo.route('/vehiculos').post((req, res)=>{
     crearVehiculo(req.body, genericCallback(res));
 });
 
+// ruta para consultar vehiculos, filtrar informacion
+rutasVehiculo.route('/vehiculos/:id').get((req, res)=>{
+    console.log('sending request get in the route /vehiculos');
+    consultarVehiculo(req.params.id, genericCallback(res));
+});
 
 rutasVehiculo.route('/vehiculos/:id').patch((req, res)=>{
     editarVehiculo(req.params.id, req.body, genericCallback(res))

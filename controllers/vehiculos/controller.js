@@ -1,11 +1,17 @@
 import { getDB } from '../../db/db.js';
 import { ObjectId } from 'mongodb';
+import { ObjectID } from 'bson';
 
  const queryAllVehiculos = async (callback) => {
     const conexion = getDB();
     await conexion.collection('vehiculo').find({}).limit(50).toArray(callback); 
     
  };
+
+ const consultarVehiculo = async(id, callback) => {
+    const conexion = getDB();
+    await conexion.collection('vehiculo').findOne({_id:new ObjectID(id)}, callback);
+ }
 
  const crearVehiculo  = async (datosVehiculo, callback) => {
 
@@ -39,4 +45,4 @@ const eliminarVehiculo = async (id, callback) => {
     await conexion.collection('vehiculo').deleteOne(filtroVehiculo, callback);
 }
 
- export { queryAllVehiculos, crearVehiculo, editarVehiculo, eliminarVehiculo };
+ export { queryAllVehiculos, crearVehiculo, editarVehiculo, eliminarVehiculo, consultarVehiculo};
