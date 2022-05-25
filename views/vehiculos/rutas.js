@@ -1,6 +1,6 @@
 import Express from 'express';
 import { getDB } from '../../db/db.js';
-import { queryAllVehiculos, crearVehiculo } from '../../controllers/vehiculos/controller.js';
+import { queryAllVehiculos, crearVehiculo, editarVehiculo } from '../../controllers/vehiculos/controller.js';
 
 const rutasVehiculo= Express.Router();
 
@@ -33,23 +33,7 @@ rutasVehiculo.route('/vehiculos/nuevo').post((req, res)=>{
 
 
 rutasVehiculo.route('/vehiculos/editar').patch((req, res)=>{
-    const edicion = req.body;
-    console.log(edicion);
-    const filtroVehiculo = {_id: new ObjectId(edicion.id)}
-    delete edicion.id
-    const operacion = {
-        $set:edicion,
-    };
-    const conexion = getDB();
-    conexion.collection('vehiculo').findOneAndUpdate(filtroVehiculo, operacion, {upsert:true, returnOriginal: true}, (err, result)=>{
-        if(err){
-            console.error('error actualizando vehiculo', err);
-            res.sendStatus(500);
-        }else{
-            console.log('actualizado con exito');
-            res.sendStatus(200);
-        }
-    });
+    editarVehiculo(req.body, genericCallback(res))
 
 });
 

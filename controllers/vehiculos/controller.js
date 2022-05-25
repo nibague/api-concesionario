@@ -1,5 +1,5 @@
 import { getDB } from '../../db/db.js';
-
+import { ObjectId } from 'mongodb';
 
  const queryAllVehiculos = async (callback) => {
     const conexion = getDB();
@@ -9,7 +9,6 @@ import { getDB } from '../../db/db.js';
 
  const crearVehiculo  = async (datosVehiculo, callback) => {
 
-    
     if(
         Object.keys(datosVehiculo).includes('name')
         && Object.keys(datosVehiculo).includes('brand')
@@ -18,10 +17,21 @@ import { getDB } from '../../db/db.js';
 
         const conexion = getDB();
             //implementar codigo para crear vehiculo en la base de datos
-        conexion.collection('vehiculo').insertOne(datosVehiculo, callback);
+        await conexion.collection('vehiculo').insertOne(datosVehiculo, callback);
         }else{
             return 'error';
         }
  }
 
- export { queryAllVehiculos, crearVehiculo };
+const editarVehiculo = async (edicion, callback)=> {
+    const filtroVehiculo = {_id: new ObjectId(edicion.id)}
+    delete edicion.id
+    const operacion = {
+        $set:edicion,
+    };
+    const conexion = getDB();
+    await conexion.collection('vehiculo').findOneAndUpdate(filtroVehiculo, operacion, {upsert:true, returnOriginal: true}, callback);
+
+}
+
+ export { queryAllVehiculos, crearVehiculo, editarVehiculo };
