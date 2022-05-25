@@ -7,4 +7,21 @@ import { getDB } from '../../db/db.js';
     
  };
 
- export { queryAllVehiculos };
+ const crearVehiculo  = async (datosVehiculo, callback) => {
+
+    
+    if(
+        Object.keys(datosVehiculo).includes('name')
+        && Object.keys(datosVehiculo).includes('brand')
+        && Object.keys(datosVehiculo).includes('model')
+    ) {
+
+        const conexion = getDB();
+            //implementar codigo para crear vehiculo en la base de datos
+        conexion.collection('vehiculo').insertOne(datosVehiculo, callback);
+        }else{
+            return 'error';
+        }
+ }
+
+ export { queryAllVehiculos, crearVehiculo };

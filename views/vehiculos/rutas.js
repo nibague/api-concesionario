@@ -1,6 +1,6 @@
 import Express from 'express';
 import { getDB } from '../../db/db.js';
-import { queryAllVehiculos } from '../../controllers/vehiculos/controller.js';
+import { queryAllVehiculos, crearVehiculo } from '../../controllers/vehiculos/controller.js';
 
 const rutasVehiculo= Express.Router();
 
@@ -28,37 +28,9 @@ rutasVehiculo.route('/vehiculos').get((req, res)=>{
 // estas solicitudes son las que se envian desde el front-end
 // se podria probar desde un formulario con un boton y desde alli enviar las solicitudes
 rutasVehiculo.route('/vehiculos/nuevo').post((req, res)=>{
-    const datosVehiculo = req.body;
-    
-    console.log('keys: ', Object.keys(datosVehiculo));
-    try {
-        if(Object.keys(datosVehiculo).includes('name')
-        && Object.keys(datosVehiculo).includes('brand')
-        && Object.keys(datosVehiculo).includes('model'))
-        {
-            const conexion = getDB();
-             //implementar codigo para crear vehiculo en la base de datos
-             conexion.collection('vehiculo').insertOne(datosVehiculo, (err, result)=>{
-                 if(err){
-                     console.error(err)
-                     res.sendStatus(500);
-                 }else{
-                     console.log(result)
-                     res.sendStatus(200);
-                 }
-
-             });
-         }else{
-             res.sendStatus(500);
-         }
-
-    }catch {
-        res.sendStatus(500);
-    }
-    
-    //res.send('vehiculo was creted');
-
+    crearVehiculo(req.body, genericCallback(res));
 });
+
 
 rutasVehiculo.route('/vehiculos/editar').patch((req, res)=>{
     const edicion = req.body;
