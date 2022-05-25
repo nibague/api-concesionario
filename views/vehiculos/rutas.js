@@ -1,27 +1,28 @@
 import Express from 'express';
 import { getDB } from '../../db/db.js';
+import { queryAllVehiculos } from '../../controllers/vehiculos/controller.js';
 
 const rutasVehiculo= Express.Router();
 
-rutasVehiculo.route('/vehiculos').get((req, res)=>{
-    console.log('sending request get in the route /vehiculos');
-    const conexion = getDB();
-    //codigo que permite traer los vehiculos de la base de datos
-    //para evitar probar con datos quemados:
-    /*const vehiculos = [
-        { nombre: 'corolla', marca: 'ferrari', modelo: '2011'},
-        { nombre: 'fiesta', marca: 'chevrolet', modelo: '2017'},
-        { nombre: 'tesla', marca: 'tesla', modelo: '2009'},
-        { nombre: 'yaris', marca: 'ford', modelo: '2004'}
-    ];*/
-    conexion.collection('vehiculo').find({}).limit(50).toArray((err, result)=>{
+const genericCallback = (res) => {
+    return (err, result) => {
+
         if(err){
             res.sendStatus(500).send('error al consultar vehiculos');
         }else{
             res.json(result);
         }
-    }); 
+        
+    };
+};
+
+
+
+rutasVehiculo.route('/vehiculos').get((req, res)=>{
+    console.log('sending request get in the route /vehiculos');
+    queryAllVehiculos(genericCallback(res));
 });
+
 
 // solicitudes de tipo post no se pueden probar en el navegador
 // estas solicitudes son las que se envian desde el front-end
