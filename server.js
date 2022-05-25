@@ -3,10 +3,13 @@
 
 //nuevo import 
 import Express from "express";
+import dotenv from 'dotenv';
 import { MongoClient, ObjectId} from 'mongodb';
 import Cors from 'cors';
 
-const stringConexion = 'mongodb+srv://Nibague:uribeparaco82@clustertest.tebmq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+dotenv.config({path:'./.env'})
+
+const stringConexion = process.env.DATABASE_URL;
 
 const client = new MongoClient(stringConexion,{
     useNewUrlParser: true,
@@ -115,8 +118,8 @@ const main = ()=> {
         }
         conexion = db.db('concesionario');
         console.log('succesful conection!')
-        return app.listen(5000, ()=>{
-            console.log('listen port 5000');
+        return app.listen(process.env.PORT, ()=>{
+            console.log(`listen port ${process.env.PORT}`);
         });
     });
     
