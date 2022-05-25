@@ -6,17 +6,9 @@ import Express from "express";
 import dotenv from 'dotenv';
 import { MongoClient, ObjectId} from 'mongodb';
 import Cors from 'cors';
+import { conectarBD, getDB } from './db/db.js';
 
 dotenv.config({path:'./.env'})
-
-const stringConexion = process.env.DATABASE_URL;
-
-const client = new MongoClient(stringConexion,{
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-});
-
-let conexion;
 
 const app = Express();
 app.use(Cors());
@@ -25,6 +17,7 @@ app.use(Express.json());
 
 app.get('/vehiculos', (req, res)=>{
     console.log('sending request get in the route /vehiculos');
+    const conexion = getDB();
     //codigo que permite traer los vehiculos de la base de datos
     //para evitar probar con datos quemados:
     /*const vehiculos = [
@@ -54,6 +47,7 @@ app.post('/vehiculos/nuevo', (req, res)=>{
         && Object.keys(datosVehiculo).includes('brand')
         && Object.keys(datosVehiculo).includes('model'))
         {
+            const conexion = getDB();
              //implementar codigo para crear vehiculo en la base de datos
              conexion.collection('vehiculo').insertOne(datosVehiculo, (err, result)=>{
                  if(err){
@@ -85,6 +79,7 @@ app.patch('/vehiculos/editar', (req, res)=>{
     const operacion = {
         $set:edicion,
     };
+    const conexion = getDB();
     conexion.collection('vehiculo').findOneAndUpdate(filtroVehiculo, operacion, {upsert:true, returnOriginal: true}, (err, result)=>{
         if(err){
             console.error('error actualizando vehiculo', err);
@@ -100,6 +95,7 @@ app.patch('/vehiculos/editar', (req, res)=>{
 app.delete('/vehiculos/eliminar', (req, res)=>{
     const edicion = req.body
     const filtroVehiculo = {_id: new ObjectId(edicion.id)} 
+    const conexion = getDB();
     conexion.collection('vehiculo').deleteOne(filtroVehiculo, (err, result) =>{
         if(err){
             console.error(err);
@@ -111,18 +107,9 @@ app.delete('/vehiculos/eliminar', (req, res)=>{
 })
 
 const main = ()=> {
-    client.connect((err, db)=>{
-        if(err){
-            console.erro('Error conectando a la base de datos');
-            return 'error';
-        }
-        conexion = db.db('concesionario');
-        console.log('succesful conection!')
-        return app.listen(process.env.PORT, ()=>{
-            console.log(`listen port ${process.env.PORT}`);
-        });
+    app.listen(process.env.PORT, ()=>{
+        console.log(`listen port ${process.env.PORT}`);
     });
-    
 };
 
-main();
+conectarBD(main);
