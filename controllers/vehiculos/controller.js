@@ -23,9 +23,8 @@ import { ObjectId } from 'mongodb';
         }
  }
 
-const editarVehiculo = async (edicion, callback)=> {
-    const filtroVehiculo = {_id: new ObjectId(edicion.id)}
-    delete edicion.id
+const editarVehiculo = async (id, edicion, callback)=> {
+    const filtroVehiculo = {_id: new ObjectId(id)}
     const operacion = {
         $set:edicion,
     };

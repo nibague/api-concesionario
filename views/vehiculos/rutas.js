@@ -27,18 +27,18 @@ rutasVehiculo.route('/vehiculos').get((req, res)=>{
 // solicitudes de tipo post no se pueden probar en el navegador
 // estas solicitudes son las que se envian desde el front-end
 // se podria probar desde un formulario con un boton y desde alli enviar las solicitudes
-rutasVehiculo.route('/vehiculos/nuevo').post((req, res)=>{
+rutasVehiculo.route('/vehiculos').post((req, res)=>{
     crearVehiculo(req.body, genericCallback(res));
 });
 
 
-rutasVehiculo.route('/vehiculos/editar').patch((req, res)=>{
-    editarVehiculo(req.body, genericCallback(res))
+rutasVehiculo.route('/vehiculos/:id').patch((req, res)=>{
+    editarVehiculo(req.params.id, req.body, genericCallback(res))
 
 });
 
-rutasVehiculo.route('/vehiculos/eliminar').delete((req, res)=>{
-    eliminarVehiculo(req.body.id, genericCallback(res))
+rutasVehiculo.route('/vehiculos/:id').delete((req, res)=>{
+    eliminarVehiculo(req.params.id, genericCallback(res))
 });
 
 export default rutasVehiculo;
