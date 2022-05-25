@@ -1,6 +1,6 @@
 import Express from 'express';
 import { getDB } from '../../db/db.js';
-import { queryAllVehiculos, crearVehiculo, editarVehiculo } from '../../controllers/vehiculos/controller.js';
+import { queryAllVehiculos, crearVehiculo, editarVehiculo, eliminarVehiculo } from '../../controllers/vehiculos/controller.js';
 
 const rutasVehiculo= Express.Router();
 
@@ -38,17 +38,7 @@ rutasVehiculo.route('/vehiculos/editar').patch((req, res)=>{
 });
 
 rutasVehiculo.route('/vehiculos/eliminar').delete((req, res)=>{
-    const edicion = req.body
-    const filtroVehiculo = {_id: new ObjectId(edicion.id)} 
-    const conexion = getDB();
-    conexion.collection('vehiculo').deleteOne(filtroVehiculo, (err, result) =>{
-        if(err){
-            console.error(err);
-            res.sendStatus(500)
-        }else{
-            res.sendStatus(200);
-        }
-    })
+    eliminarVehiculo(req.body.id, genericCallback(res))
 });
 
 export default rutasVehiculo;
