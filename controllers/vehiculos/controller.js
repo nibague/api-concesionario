@@ -1,6 +1,5 @@
 import { getDB } from '../../db/db.js';
 import { ObjectId } from 'mongodb';
-import { ObjectID } from 'bson';
 
  const queryAllVehiculos = async (callback) => {
     const conexion = getDB();
@@ -10,7 +9,7 @@ import { ObjectID } from 'bson';
 
  const consultarVehiculo = async(id, callback) => {
     const conexion = getDB();
-    await conexion.collection('vehiculo').findOne({_id:new ObjectID(id)}, callback);
+    await conexion.collection('vehiculo').findOne({_id:new ObjectId(id)}, callback);
  }
 
  const crearVehiculo  = async (datosVehiculo, callback) => {
